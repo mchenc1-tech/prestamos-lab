@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import Inventario from './pages/Inventario';
+import PrestamosActivos from './pages/PrestamosActivos';
 import FormularioPrestamo from './components/FormularioPrestamo';
 import type { DatosPrestamo } from './components/FormularioPrestamo';
 import { equiposPrueba } from './data/equiposPrueba';
 import type { Equipo, Prestamo } from './types';
 
+type Vista = 'inventario' | 'prestamos';
+
 function App() {
   const [equipos, setEquipos] = useState<Equipo[]>(equiposPrueba);
   const [prestamos, setPrestamos] = useState<Prestamo[]>([]);
   const [equipoSeleccionado, setEquipoSeleccionado] = useState<Equipo | null>(null);
+  const [vista, setVista] = useState<Vista>('inventario');
 
   const handlePrestar = (id: number) => {
     const equipo = equipos.find((e) => e.id === id) ?? null;
@@ -28,7 +32,6 @@ function App() {
       devuelto: false,
     };
 
-    // Actualizaciones inmutables: nunca push ni asignación directa
     setPrestamos([...prestamos, nuevoPrestamo]);
     setEquipos(
       equipos.map((e) =>
@@ -38,9 +41,46 @@ function App() {
     setEquipoSeleccionado(null);
   };
 
+  const handleDevolver = (prestamoId: number) => {
+    const prestamo = prestamos.find((p) => p.id === prestamoId);
+    if (!prestamo) return;
+
+    setPrestamos(
+      prestamos.map((p) => (p.id === prestamoId ? { ...p, devuelto: true } : p))
+    );
+    setEquipos(
+      equipos.map((e) =>
+        e.id === prestamo.equipoId ? { ...e, disponible: true } : e
+      )
+    );
+  };
+
   return (
     <>
-      <Inventario equipos={equipos} onPrestar={handlePrestar} />
+      <nav className="menu">
+        <button
+          className={vista === 'inventario' ? 'activo' : ''}
+          onClick={() => setVista('inventario')}
+        >
+          Inventario
+        </button>
+        <button
+          className={vista === 'prestamos' ? 'activo' : ''}
+          onClick={() => setVista('prestamos')}
+        >
+          Préstamos activos
+        </button>
+      </nav>
+
+      {vista === 'inventario' ? (
+        <Inventario equipos={equipos} onPrestar={handlePrestar} />
+      ) : (
+        <PrestamosActivos
+          prestamos={prestamos}
+          equipos={equipos}
+          onDevolver={handleDevolver}
+        />
+      )}
 
       {equipoSeleccionado && (
         <FormularioPrestamo
