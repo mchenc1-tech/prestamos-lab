@@ -1,16 +1,17 @@
 import Encabezado from '../components/Encabezado';
 import ListaEquipos from '../components/ListaEquipos';
-import { equiposPrueba } from '../data/equiposPrueba';
+import type { Equipo } from '../types';
 
-function Inventario() {
-  const handlePrestar = (id: number) => {
-    console.log('Prestar equipo con id:', id);
-  };
+interface InventarioProps {
+  equipos: Equipo[];
+  onPrestar: (id: number) => void;
+}
 
+function Inventario({ equipos, onPrestar }: InventarioProps) {
   return (
     <div>
-      <Encabezado equipos={equiposPrueba} />
-      <ListaEquipos equipos={equiposPrueba} onPrestar={handlePrestar} />
+      <Encabezado equipos={equipos} />
+      <ListaEquipos equipos={equipos} onPrestar={onPrestar} />
     </div>
   );
 }
