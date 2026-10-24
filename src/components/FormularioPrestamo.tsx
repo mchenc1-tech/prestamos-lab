@@ -18,6 +18,8 @@ interface FormularioPrestamoProps {
   equipo: Equipo;
   onGuardar: (datos: DatosPrestamo) => void;
   onCancelar: () => void;
+  enviando?: boolean;
+  errorEnvio?: string;
 }
 
 interface Errores {
@@ -26,7 +28,13 @@ interface Errores {
   fechaLimite: string;
 }
 
-function FormularioPrestamo({ equipo, onGuardar, onCancelar }: FormularioPrestamoProps) {
+function FormularioPrestamo({
+  equipo,
+  onGuardar,
+  onCancelar,
+  enviando = false,
+  errorEnvio = '',
+}: FormularioPrestamoProps) {
   const [solicitante, setSolicitante] = useState('');
   const [carne, setCarne] = useState('');
   const [fechaLimite, setFechaLimite] = useState('');
@@ -88,12 +96,19 @@ function FormularioPrestamo({ equipo, onGuardar, onCancelar }: FormularioPrestam
           {errores.fechaLimite && <span className="error">{errores.fechaLimite}</span>}
         </label>
 
+        {errorEnvio && <span className="error">{errorEnvio}</span>}
+
         <div className="modal-botones">
-          <button type="button" className="btn-cancelar" onClick={onCancelar}>
+          <button
+            type="button"
+            className="btn-cancelar"
+            onClick={onCancelar}
+            disabled={enviando}
+          >
             Cancelar
           </button>
-          <button type="submit" className="btn-guardar">
-            Guardar
+          <button type="submit" className="btn-guardar" disabled={enviando}>
+            {enviando ? 'Guardando...' : 'Guardar'}
           </button>
         </div>
       </form>
