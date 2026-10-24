@@ -1,32 +1,87 @@
-# React + TypeScript + Vite
+# Préstamos Lab
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Aplicación web para controlar el préstamo de equipos del laboratorio de cómputo: qué equipo está prestado, a quién y hasta cuándo.
 
-Currently, two official plugins are available:
+Hecha con React + TypeScript (Vite), con una API REST simulada con json-server.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Requisitos
 
-## React Compiler
+- Node.js 18 o superior
+- npm
+- Git
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Instalación
 
-## Expanding the Oxlint configuration
+1. Clonar el repositorio:
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+git clone https://github.com/mchenc1-tech/prestamos-lab.git
+cd prestamos-lab
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+2. Instalar las dependencias:
+
+```bash
+npm install
+```
+
+## Variables de entorno
+
+El proyecto incluye un archivo `.env` con la URL base de la API:
+
+```
+VITE_API_URL=/api
+```
+
+Vite redirige las peticiones de `/api` hacia `http://localhost:3001` (ver `vite.config.ts`), así se evitan problemas de CORS.
+
+## Ejecución
+
+Se necesitan **dos terminales abiertas al mismo tiempo**, ambas dentro de la carpeta del proyecto.
+
+**Terminal 1: levantar la API** (puerto 3001)
+
+```bash
+npm run api
+```
+
+**Terminal 2: levantar el frontend**
+
+```bash
+npm run dev
+```
+
+Luego abrir en el navegador la dirección que muestra la terminal, normalmente `http://localhost:5173`.
+
+> Si se cambia el archivo `.env` o `vite.config.ts`, hay que detener y volver a iniciar `npm run dev`.
+
+## Endpoints de la API
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| GET | `/equipos` | Cargar el inventario |
+| GET | `/prestamos?devuelto=false` | Cargar préstamos activos |
+| POST | `/prestamos` | Registrar un préstamo |
+| PATCH | `/equipos/:id` | Cambiar disponibilidad |
+| PATCH | `/prestamos/:id` | Marcar un préstamo como devuelto |
+
+Los datos se guardan en el archivo `db.json`.
+
+## Estructura del proyecto
+
+```
+src/
+  components/   Componentes de presentación
+  pages/        Vistas principales
+  services/     Funciones que llaman a la API
+  hooks/        Custom hooks (useEquipos, usePrestamos)
+  utils/        Validaciones
+  types/        Interfaces TypeScript
+  data/         Datos de prueba
+```
+
+## Reglas de la variante
+
+- Categorías de equipo: Tablet, Cámara y Micrófono
+- Máximo de días de préstamo: 2
+- No se presta los fines de semana: una fecha límite en sábado o domingo no es válida
