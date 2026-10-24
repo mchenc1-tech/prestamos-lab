@@ -255,3 +255,29 @@ body {
   padding: 2rem;
   color: #6b7280;
 }
+
+.estado {
+  padding: 3rem 2rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #374151;
+}
+
+.estado-error {
+  color: #991b1b;
+}
+
+.estado-error button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.estado-error button:hover {
+  background: #1d4ed8;
+}

@@ -3,13 +3,13 @@ import Inventario from './pages/Inventario';
 import PrestamosActivos from './pages/PrestamosActivos';
 import FormularioPrestamo from './components/FormularioPrestamo';
 import type { DatosPrestamo } from './components/FormularioPrestamo';
-import { equiposPrueba } from './data/equiposPrueba';
+import { useEquipos } from './hooks/useEquipos';
 import type { Equipo, Prestamo } from './types';
 
 type Vista = 'inventario' | 'prestamos';
 
 function App() {
-  const [equipos, setEquipos] = useState<Equipo[]>(equiposPrueba);
+  const { equipos, setEquipos, cargando, error, recargar } = useEquipos();
   const [prestamos, setPrestamos] = useState<Prestamo[]>([]);
   const [equipoSeleccionado, setEquipoSeleccionado] = useState<Equipo | null>(null);
   const [vista, setVista] = useState<Vista>('inventario');
@@ -54,6 +54,19 @@ function App() {
       )
     );
   };
+
+  if (cargando) {
+    return <p className="estado">Cargando inventario...</p>;
+  }
+
+  if (error) {
+    return (
+      <div className="estado estado-error">
+        <p>{error}</p>
+        <button onClick={recargar}>Reintentar</button>
+      </div>
+    );
+  }
 
   return (
     <>
