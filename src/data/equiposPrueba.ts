@@ -1,0 +1,12 @@
+import type { Equipo } from '../types';
+
+export const equiposPrueba: Equipo[] = [
+  { id: 1, nombre: 'iPad Air', categoria: 'Tablet', disponible: true },
+  { id: 2, nombre: 'Samsung Galaxy Tab S8', categoria: 'Tablet', disponible: true },
+  { id: 3, nombre: 'Lenovo Tab P11', categoria: 'Tablet', disponible: false },
+  { id: 4, nombre: 'Canon EOS Rebel T7', categoria: 'Cámara', disponible: true },
+  { id: 5, nombre: 'Sony Alpha a6000', categoria: 'Cámara', disponible: true },
+  { id: 6, nombre: 'GoPro Hero 11', categoria: 'Cámara', disponible: false },
+  { id: 7, nombre: 'Shure SM58', categoria: 'Micrófono', disponible: true },
+  { id: 8, nombre: 'Rode NT-USB', categoria: 'Micrófono', disponible: true },
+];
